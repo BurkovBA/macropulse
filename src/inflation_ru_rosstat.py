@@ -6,17 +6,26 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import telegram
+from bs4 import BeautifulSoup
 
 
-def get_url():
-    current_date = datetime.today().strftime('%d-%m-%y')
-    pattern = f'https://rosstat.gov.ru/storage/mediabank/(\d+_{current_date}).html'
-    
+def get_url(current_date=None):
+    # get the catalog page with news
     news_page = 'https://rosstat.gov.ru/central-news'
     response = requests.get(news_page)
-    match = re.search(pattern, response.text)
-    
-    return match.group(1)
+
+    # Create a BeautifulSoup object from the HTML string
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    # Find the first anchor element that contains the specified text
+    link_element = soup.find('a', text=lambda t: t and 'Об оценке индекса потребительских цен' in t)
+
+    # Get the URL of the link element
+    link_url = link_element['href']
+
+    return "https://rosstat.gov.ru" + link_url
+
 
 def get_image():
     # Set up the Chrome driver
@@ -29,14 +38,32 @@ def get_image():
     driver.get(url)
 
     # Wait for the element to appear on the page
-    wait = WebDriverWait(driver, 10)
-    element = wait.until(EC.presence_of_element_located((By.CLASS_NAME, "element-id")))
+    wait = WebDriverWait(driver, 5)
+    element = wait.until(EC.presence_of_element_located((By.CLASS_NAME, "Table1")))
 
     # Take a screenshot of the element
     element_screenshot = element.screenshot_as_png
 
     # Quit the driver
     driver.quit()
+
+    return element_screenshot
+
+
+def generate_telegram_message():
+    # Initialize the bot with your API token
+    bot = telegram.Bot(token='YOUR_API_TOKEN')
+
+    # Upload the image to Telegram and get its file ID
+    photo = bot.send_photo(chat_id='@CHANNEL_OR_CHAT_ID', photo=open('image.jpg', 'rb'))
+    photo_id = photo.photo[-1].file_id
+
+    # Create the caption for the post
+    caption = 'This is a caption for the image'
+
+    # Send the post to Telegram
+    bot.send_photo(chat_id='@CHANNEL_OR_CHAT_ID', photo=photo_id, caption=caption)
+
 
 if __name__ == '__main__':
     get_image()
