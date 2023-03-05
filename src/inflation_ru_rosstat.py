@@ -70,9 +70,34 @@ def get_table(url):
         data.append([cell.text.strip() for cell in cells])
 
     # Create a Pandas DataFrame from the table data
-    df = pd.DataFrame(data[1:], columns=data[0])
+    df = pd.DataFrame(
+        data[1:],
+        columns=["Продукт", "Изменение цены на этой неделе", "Прошлая неделя", "Прошлый месяц", "Прошлый год"],
+    )
+    df["Изменение цены на этой неделе"] = df["Изменение цены на этой неделе"].str.replace(',', '.').astype(float)
+    df["Прошлая неделя"] = df["Прошлая неделя"].str.replace(',', '.').astype(float)
+    df["Прошлый месяц"] = df["Прошлый месяц"].str.replace(',', '.').astype(float)
+    df["Прошлый год"] = df["Прошлый год"].str.replace(',', '.').astype(float)
 
     return df
+
+
+def detect_outliers(df):
+    row = df.iloc[:, 1]
+
+    # Calculate the IQR of the row
+    q1 = row.quantile(0.25)
+    q3 = row.quantile(0.75)
+    iqr = q3 - q1
+
+    # Calculate the upper and lower bounds for outliers
+    lower_bound = q1 - (3 * iqr)
+    upper_bound = q3 + (3 * iqr)
+
+    # Find the values in the row that are outside the bounds
+    outliers = row[(row < lower_bound) | (row > upper_bound)]
+
+    return outliers
 
 
 async def generate_telegram_message(tg_api_token):
