@@ -8,9 +8,10 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import telegram
 from bs4 import BeautifulSoup
+import pandas as pd
 
 
-def get_url():
+def get_page_url():
     # get the catalog page with news
     news_page = 'https://rosstat.gov.ru/central-news'
     response = requests.get(news_page)
@@ -27,12 +28,9 @@ def get_url():
     return "https://rosstat.gov.ru" + link_url
 
 
-def get_image():
+def get_image(url):
     # Set up the Chrome driver
     driver = webdriver.Chrome()
-
-    # get page url
-    url = get_url()
     
     # Load the webpage
     driver.get(url)
@@ -50,14 +48,44 @@ def get_image():
     return element_screenshot
 
 
+def get_table(url):
+    # Name of the class of the table HTML element
+    table_class = 'Table2'
+
+    # Send a GET request to the URL and get the HTML content
+    response = requests.get(url)
+    html_content = response.content
+
+    # Parse the HTML content using BeautifulSoup
+    soup = BeautifulSoup(html_content, 'html.parser')
+
+    # Find the table element by class name
+    table = soup.find('table', {'class': table_class})
+
+    # Extract the table data into a list of lists
+    data = []
+    rows = table.find_all('tr')
+    for row in rows[3:]:  # first 3 rows are header
+        cells = row.find_all('td')
+        data.append([cell.text.strip() for cell in cells])
+
+    # Create a Pandas DataFrame from the table data
+    df = pd.DataFrame(data[1:], columns=data[0])
+
+    return df
+
+
 async def generate_telegram_message(tg_api_token):
-    url = get_url()
+    url = get_page_url()
 
     # Initialize the bot with your API token
     bot = telegram.Bot(token=tg_api_token)
 
-    # get image from RosStat
-    image = get_image()
+    # get image
+    image = get_image(url)
+
+    # get table with specific goods
+    table = get_table(url)
 
     # Create the caption for the post
     caption = f'''

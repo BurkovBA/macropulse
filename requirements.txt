@@ -2,3 +2,5 @@ requests
 selenium
 python-telegram-bot
 beautifulsoup4
+pandas
+numpy
