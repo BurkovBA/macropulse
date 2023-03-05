@@ -112,11 +112,17 @@ async def generate_telegram_message(tg_api_token):
     # get table with specific goods
     table = get_table(url)
 
+    # prepare the text on outliers
+    outliers = detect_outliers(table)
+    outliers_text = "\n".join([f"{table.iloc[outlier_index]['Продукт']}: {outlier_value}%" for outlier_index, outlier_value in outliers.iteritems()])
+
     # Create the caption for the post
     caption = f'''
 <u>Вышла <a href="{url}">статистика</a> по инфляции в России за последнюю неделю.</u>
 
-TODO: Больше текстовых подробностей и анализа.
+Существенно изменилась стоимость следующих товаров:
+
+{outliers_text}
     '''
 
     # Upload the image to Telegram and get its file ID
