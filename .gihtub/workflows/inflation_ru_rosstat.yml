@@ -2,7 +2,7 @@ name: Collect inflation in Russia data from Rosstat
 
 on:
   schedule:
-    - cron: '5 19 * * 3'
+    - cron: '5 16 * * 3'
 
 jobs:
   run_script:
@@ -21,4 +21,4 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run parser script
-        run: python src/inflation_ru_rosstat.py
+        run: python src/inflation_ru_rosstat.py ${{ secrets.TG_API_TOKEN }}

@@ -1,4 +1,4 @@
 requests
 selenium
-telegram
+python-telegram-bot
 beautifulsoup4

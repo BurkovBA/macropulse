@@ -1,6 +1,6 @@
-import re
-import datetime
+import sys
 import requests
+import asyncio
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -10,7 +10,7 @@ import telegram
 from bs4 import BeautifulSoup
 
 
-def get_url(current_date=None):
+def get_url():
     # get the catalog page with news
     news_page = 'https://rosstat.gov.ru/central-news'
     response = requests.get(news_page)
@@ -50,20 +50,34 @@ def get_image():
     return element_screenshot
 
 
-def generate_telegram_message():
-    # Initialize the bot with your API token
-    bot = telegram.Bot(token='YOUR_API_TOKEN')
+async def generate_telegram_message(tg_api_token):
+    url = get_url()
 
-    # Upload the image to Telegram and get its file ID
-    photo = bot.send_photo(chat_id='@CHANNEL_OR_CHAT_ID', photo=open('image.jpg', 'rb'))
-    photo_id = photo.photo[-1].file_id
+    # Initialize the bot with your API token
+    bot = telegram.Bot(token=tg_api_token)
+
+    # get image from RosStat
+    image = get_image()
 
     # Create the caption for the post
-    caption = 'This is a caption for the image'
+    caption = f'''
+<u>Вышла <a href="{url}">статистика</a> по инфляции в России за последнюю неделю.</u>
+
+TODO: Больше текстовых подробностей и анализа.
+    '''
+
+    # Upload the image to Telegram and get its file ID
+    await bot.send_photo(chat_id='@MacroPulse', photo=image, caption=caption, parse_mode='html')
+    # photo_id = photo.photo[-1].file_id
 
     # Send the post to Telegram
-    bot.send_photo(chat_id='@CHANNEL_OR_CHAT_ID', photo=photo_id, caption=caption)
+    # await bot.send_photo(chat_id='@MacroPulse', photo=photo_id, caption=caption)
 
 
 if __name__ == '__main__':
-    get_image()
+    tg_api_token = sys.argv[1]
+
+    try:
+        asyncio.run(generate_telegram_message(tg_api_token))
+    except KeyboardInterrupt:  # Ignore exception when Ctrl-C is pressed
+        pass
