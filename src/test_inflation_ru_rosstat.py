@@ -28,3 +28,8 @@ class InlationRuRosstatUnitTest(unittest.TestCase):
         table = inflation_ru_rosstat.get_table(url)
         outliers = inflation_ru_rosstat.detect_outliers(table)
         print(outliers)
+
+    def test_get_main_text(self):
+        url = inflation_ru_rosstat.get_page_url()
+        main_text = inflation_ru_rosstat.get_main_text(url)
+        print(main_text)

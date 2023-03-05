@@ -28,6 +28,20 @@ def get_page_url():
     return "https://rosstat.gov.ru" + link_url
 
 
+def get_main_text(url):
+    # Send a GET request to the URL and get the HTML content
+    response = requests.get(url)
+    html_content = response.content
+
+    # Parse the HTML content using BeautifulSoup
+    soup = BeautifulSoup(html_content, 'html.parser')
+
+    p_P7 = soup.find('p', {'class': 'P7'})
+    span_T11 = p_P7.find_all('span', {'class': 'T11'})
+
+    return "".join([span.text for span in span_T11])
+
+
 def get_image(url):
     # Set up the Chrome driver
     driver = webdriver.Chrome()
@@ -109,6 +123,9 @@ async def generate_telegram_message(tg_api_token):
     # get image
     image = get_image(url)
 
+    # get main text
+    main_text = get_main_text(url)
+
     # get table with specific goods
     table = get_table(url)
 
@@ -119,6 +136,8 @@ async def generate_telegram_message(tg_api_token):
     # Create the caption for the post
     caption = f'''
 <u>Вышла <a href="{url}">статистика</a> по инфляции в России за последнюю неделю.</u>
+
+{main_text}
 
 Существенно изменилась стоимость следующих товаров:
 
