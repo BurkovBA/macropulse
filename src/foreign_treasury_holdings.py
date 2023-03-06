@@ -1,15 +1,18 @@
 import sys
 import requests
 import asyncio
-from io import StringIO
+from io import StringIO, BytesIO
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import telegram
-from bs4 import BeautifulSoup
+from PIL import Image
+
 import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
 
 
 url = "https://ticdata.treasury.gov/Publish/mfh.txt"
@@ -59,11 +62,40 @@ def get_pre_as_dataframe():
 
     df = pd.read_csv(csvStringIO, sep='\s\s+', names=['Country', '1 month ago', '2 months ago', '3 months ago', '4 months ago', '5 months ago', '6 months ago', '7 months ago', '8 months ago', '9 months ago', '10 months ago', '11 months ago', '12 months ago', '13 months ago'])
 
+    df['1 month ago'] = df['1 month ago'].astype(float)
+    df['2 months ago'] = df['2 months ago'].astype(float)
+    df['3 months ago'] = df['3 months ago'].astype(float)
+    df['4 months ago'] = df['4 months ago'].astype(float)
+    df['5 months ago'] = df['5 months ago'].astype(float)
+    df['6 months ago'] = df['6 months ago'].astype(float)
+    df['7 months ago'] = df['7 months ago'].astype(float)
+    df['8 months ago'] = df['8 months ago'].astype(float)
+    df['9 months ago'] = df['9 months ago'].astype(float)
+    df['10 months ago'] = df['10 months ago'].astype(float)
+    df['11 months ago'] = df['11 months ago'].astype(float)
+    df['12 months ago'] = df['12 months ago'].astype(float)
+    df['13 months ago'] = df['13 months ago'].astype(float)
+
     return df
 
 
 def get_plot(df):
-    return
+    plt.figure(figsize=(10, 10))
+    plt.ylabel('US debt holdings ($ bln.)', fontsize=12)
+    plt.xlabel('Months ago', fontsize=12)
+
+    x = np.arange(len(df.columns) - 1)
+
+    for index, row in df.iterrows():
+        plt.plot(x, row.to_numpy()[1:], label=str(index))
+
+    plt.savefig("image.png")
+
+    img_buffer = BytesIO()
+    plt.savefig(img_buffer, format='png')
+    img_buffer.seek(0)  # important to set seek(0), otherwise reading it will return empty result
+
+    return img_buffer
 
 
 async def generate_telegram_message(tg_api_token):
@@ -74,7 +106,7 @@ async def generate_telegram_message(tg_api_token):
     image = get_pre_as_image()
 
     # get dataframe
-    df = get_pre_as_dataframe(url)
+    df = get_pre_as_dataframe()
 
     # get line chart of dynamics
     plot = get_plot(df)
@@ -85,7 +117,10 @@ async def generate_telegram_message(tg_api_token):
     '''
 
     # Upload the image to Telegram and get its file ID
-    await bot.send_photo(chat_id='@MacroPulse', photo=image, caption=caption, parse_mode='html')
+    photo1 = telegram.InputMediaPhoto(image)
+    photo2 = telegram.InputMediaPhoto(plot)
+
+    await bot.send_media_group(chat_id='@MacroPulse', media=[photo1, photo2], caption=caption, parse_mode='html')
 
 
 if __name__ == '__main__':

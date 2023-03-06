@@ -13,3 +13,7 @@ class ForeignTreasuryHoldingsUnitTest(unittest.TestCase):
     def test_get_pre_as_dataframe(self):
         df = foreign_treasury_holdings.get_pre_as_dataframe()
         print(df)
+
+    def test_get_plot(self):
+        df = foreign_treasury_holdings.get_pre_as_dataframe()
+        foreign_treasury_holdings.get_plot(df)
