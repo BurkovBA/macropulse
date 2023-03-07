@@ -79,15 +79,27 @@ def get_pre_as_dataframe():
     return df
 
 
+def sort_holdings_by_abs_change(df):
+    # sort the df by change of holdings
+    sorted_df = df.iloc[df.apply(lambda row: abs(row['1 month ago'] - row['2 months ago']), axis=1).argsort()[::-1]]
+
+    # calculate the absolute difference between the two columns
+    sorted_df['abs diff'] = abs(sorted_df['1 month ago'] - sorted_df['2 months ago'])
+
+    return sorted_df
+
+
 def get_plot(df):
-    plt.figure(figsize=(10, 10))
+    plt.figure(figsize=(16, 16))
     plt.ylabel('US debt holdings ($ bln.)', fontsize=12)
     plt.xlabel('Months ago', fontsize=12)
 
     x = np.arange(len(df.columns) - 1)
 
     for index, row in df.iterrows():
-        plt.plot(x, row.to_numpy()[1:], label=str(index))
+        plt.plot(x, row.to_numpy()[1:], label=row['Country'])
+
+    plt.legend()
 
     plt.savefig("image.png")
 
@@ -111,9 +123,21 @@ async def generate_telegram_message(tg_api_token):
     # get line chart of dynamics
     plot = get_plot(df)
 
+    # sort holdings by
+    sorted_df = sort_holdings_by_abs_change(df)
+
+    grand_total_difference = sorted_df.loc[sorted_df['Country'] == 'Grand Total']['1 month ago'].iloc[0] - sorted_df.loc[sorted_df['Country'] == 'Grand Total']['2 months ago'].iloc[0]
+    print(f"grand_total_difference = {grand_total_difference}")
+    if grand_total_difference >= 0:
+        verb = 'вырос'
+    else:
+        verb = 'сократился'
+
     # Create the caption for the post
     caption = f'''
 <u>Вышла <a href="{url}">статистика</a> по изменению позиций иностранных держателей в US Treasuries.</u>
+    
+    Общий госдолг, выкупленный иностранцами, {verb} на {sorted_df.loc[sorted_df['Country'] == 'Grand Total']['abs diff'].iloc[0]:.2f} миллиардов долларов.
     '''
 
     # Upload the image to Telegram and get its file ID
