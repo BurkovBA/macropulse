@@ -22,7 +22,7 @@ jobs:
         uses: nanasess/setup-chromedriver@v1
 
       - name: Test chromedriver
-        run: chromedriver --url-base=/wd/hub  # export DISPLAY=:99 && chromedriver --url-base=/wd/hub & sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &  # optional
+        run: timeout 5 chromedriver --url-base=/wd/hub  # export DISPLAY=:99 && chromedriver --url-base=/wd/hub & sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &  # optional
 
       - name: Set up Python environment
         uses: actions/setup-python@v2
