@@ -12,6 +12,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Install chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Test chrome
+        run: chrome --version
+
+      - name: Install chromedriver
+        uses: nanasess/setup-chromedriver@v1
+
+      - name: Test chromedriver
+        run: chromedriver --url-base=/wd/hub  # export DISPLAY=:99 && chromedriver --url-base=/wd/hub & sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &  # optional
+
       - name: Set up Python environment
         uses: actions/setup-python@v2
         with:
