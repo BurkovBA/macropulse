@@ -143,6 +143,11 @@ async def generate_telegram_message(tg_api_token):
     # get image
     image = get_pre_as_image()
 
+    # Save the image to the buffer as a PNG file
+    image_buffer = BytesIO()
+    image.save(image_buffer, format='PNG')
+    image_buffer.seek(0)  # important
+
     # get dataframe
     df = get_pre_as_dataframe()
 
@@ -167,7 +172,7 @@ async def generate_telegram_message(tg_api_token):
     '''
 
     # Upload the image to Telegram and get its file ID
-    photo1 = telegram.InputMediaPhoto(image)
+    photo1 = telegram.InputMediaPhoto(image_buffer)
     photo2 = telegram.InputMediaPhoto(plot)
 
     await bot.send_media_group(chat_id='@MacroPulse', media=[photo1, photo2], caption=caption, parse_mode='html')
