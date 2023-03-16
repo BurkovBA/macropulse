@@ -36,8 +36,8 @@ def get_main_text(url):
     # Parse the HTML content using BeautifulSoup
     soup = BeautifulSoup(html_content, 'html.parser')
 
-    p_P7 = soup.find('p', {'class': 'P7'})
-    span_T11 = p_P7.find_all('span', {'class': 'T11'})
+    p_P7 = soup.find('p', {'class': 'P2'})
+    span_T11 = p_P7.find_all('span', {'class': 'T10'})
 
     return "".join([span.text for span in span_T11])
 
