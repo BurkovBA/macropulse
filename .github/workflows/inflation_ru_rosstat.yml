@@ -22,7 +22,7 @@ jobs:
         uses: nanasess/setup-chromedriver@v1
 
       - name: Test chromedriver
-        run: timeout 5 chromedriver --url-base=/wd/hub || ( [[ $? -eq 124 ]] && echo "Chromedriver launched successfully"
+        run: timeout 5 chromedriver --url-base=/wd/hub || ( [[ $? -eq 124 ]] && echo "Chromedriver launched successfully" )
 
       - name: Set up Python environment
         uses: actions/setup-python@v2
