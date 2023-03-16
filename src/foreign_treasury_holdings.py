@@ -94,15 +94,15 @@ def sort_holdings_by_abs_change(df):
 
 def get_plot(df):
     plt.figure(figsize=(16, 16))
-    plt.ylabel('US debt holdings ($ bln.)', fontsize=12)
-    plt.xlabel('Months ago', fontsize=12)
+    plt.ylabel('US debt holdings ($ bln.)', fontsize=14)
+    plt.xlabel('Months ago', fontsize=14)
 
     x = np.arange(len(df.columns) - 1)
 
     for index, row in df.iterrows():
         plt.plot(x, row.to_numpy()[1:], label=row['Country'])
 
-    plt.legend()
+    plt.legend(fontsize=14)
 
     plt.savefig("image.png")
 
