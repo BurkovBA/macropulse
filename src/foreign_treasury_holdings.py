@@ -39,16 +39,16 @@ def get_pre_as_image():
     wait = WebDriverWait(driver, 5)
     element = wait.until(EC.presence_of_element_located((By.TAG_NAME, "Pre")))
 
-    # Take a screenshot of the element
-    element_screenshot = element.screenshot_as_png
+    # Take a screenshot of element and convert it into a PIL Image object
+    pil_image = Image.open(BytesIO(element.screenshot_as_png))
 
     # Crop the image from right side (too much white space left there)
-    element_screenshot = crop_image(element_screenshot)
+    pil_image = crop_image(pil_image)
 
     # Quit the driver
     driver.quit()
 
-    return element_screenshot
+    return pil_image
 
 
 def crop_image(image):
