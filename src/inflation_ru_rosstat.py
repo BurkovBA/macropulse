@@ -43,9 +43,13 @@ def get_main_text(url):
 
 
 def get_image(url):
+    options = webdriver.ChromeOptions()
+
+    options.headless = True
+
     # Set up the Chrome driver
-    driver = webdriver.Chrome()
-    
+    driver = webdriver.Chrome(options=options)
+
     # Load the webpage
     driver.get(url)
 

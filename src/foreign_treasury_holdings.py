@@ -21,6 +21,9 @@ url = "https://ticdata.treasury.gov/Publish/mfh.txt"
 def get_pre_as_image():
     # Set screen resolution
     options = webdriver.ChromeOptions()
+
+    options.headless = True
+
     options.add_argument('--window-size=2560,1440')  # set screen resolution to 2560x1440 or 1920x1080
 
     # Set zoom level
