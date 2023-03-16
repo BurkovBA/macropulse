@@ -42,10 +42,33 @@ def get_pre_as_image():
     # Take a screenshot of the element
     element_screenshot = element.screenshot_as_png
 
+    # Crop the image from right side (too much white space left there)
+    element_screenshot = crop_image(element_screenshot)
+
     # Quit the driver
     driver.quit()
 
     return element_screenshot
+
+
+def crop_image(image):
+    # Get the width and height of the image
+    width, height = image.size
+
+    # Traverse the pixels from right to left and find the last non-white pixel on each row
+    right_boundary = width
+    for x in range(width - 1, -1, -1):
+        for y in range(height):
+            pixel = image.getpixel((x, y))
+            if pixel != (255, 255, 255, 255):
+                right_boundary = x
+                break
+        else:
+            continue
+        break
+
+    # Crop the image using the right boundary
+    return image.crop((0, 0, right_boundary, height))
 
 
 def get_pre_as_dataframe():
