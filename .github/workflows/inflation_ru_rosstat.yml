@@ -1,6 +1,7 @@
 name: Collect inflation in Russia data from Rosstat
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: '5 16 * * 3'
 
