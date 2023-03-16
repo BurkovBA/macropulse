@@ -102,7 +102,7 @@ def get_plot(df):
     for index, row in df.iterrows():
         plt.plot(x, row.to_numpy()[1:], label=row['Country'])
 
-    plt.legend(fontsize=14)
+    plt.legend(fontsize=14, loc='right')
 
     plt.savefig("image.png")
 
