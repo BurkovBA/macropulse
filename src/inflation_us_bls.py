@@ -62,6 +62,12 @@ async def generate_telegram_message(tg_api_token):
     bot = telegram.Bot(token=tg_api_token)
 
     image = get_highcharts_plot()
+
+    # convert PIL image into an in-memory buffer with png
+    img_buffer = BytesIO()
+    image.save(img_buffer, format='PNG')
+    img_buffer.seek(0)  # important to set seek(0), otherwise reading it will return empty result
+
     header, message = get_text()
 
     # Create the caption for the post
@@ -74,7 +80,7 @@ async def generate_telegram_message(tg_api_token):
     '''
 
     # Upload the image to Telegram and get its file ID
-    await bot.send_photo(chat_id='@MacroPulse', photo=image, caption=caption, parse_mode='html')
+    await bot.send_photo(chat_id='@MacroPulse', photo=img_buffer, caption=caption, parse_mode='html')
 
 
 if __name__ == '__main__':
