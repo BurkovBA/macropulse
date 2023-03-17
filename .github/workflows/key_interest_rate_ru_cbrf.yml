@@ -1,4 +1,4 @@
-name: Collect inflation data for US from Bureau of Labor Statistics
+name: Collect interest rate in Russia from Central Bank of Russian Federation
 
 on:
   workflow_dispatch:

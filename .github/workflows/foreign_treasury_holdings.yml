@@ -1,4 +1,4 @@
-name: Collect treasury holdings
+name: Collect US treasuries foreign holdings
 
 on:
   workflow_dispatch:
