@@ -1,0 +1,45 @@
+name: Collect inflation data for US from Bureau of Labor Statistics
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Schedule is here: https://www.bls.gov/schedule/news_release/cpi.htm
+    - cron: '30 8 04 12 * 2023'
+    - cron: '30 8 05 10 * 2023'
+    - cron: '30 8 06 13 * 2023'
+    - cron: '30 8 07 12 * 2023'
+    - cron: '30 8 08 10 * 2023'
+    - cron: '30 8 09 13 * 2023'
+    - cron: '30 8 10 12 * 2023'
+    - cron: '30 8 11 14 * 2023'
+    - cron: '30 8 12 12 * 2023'
+jobs:
+  run_script:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Test chrome
+        run: chrome --version
+
+      - name: Install chromedriver
+        uses: nanasess/setup-chromedriver@v1
+
+      - name: Test chromedriver
+        run: timeout 5 chromedriver --url-base=/wd/hub || ( [[ $? -eq 124 ]] && echo "Chromedriver launched successfully" )
+
+      - name: Set up Python environment
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run parser script
+        run: python src/inflation_us_bls.py ${{ secrets.TG_API_TOKEN }}
