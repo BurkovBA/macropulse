@@ -14,7 +14,7 @@ import pandas as pd
 # Events schedule is here: https://www.bls.gov/schedule/news_release/cpi.htm
 
 
-def generate_telegram_message(tg_api_token):
+async def generate_telegram_message(tg_api_token):
     pass
 
 
