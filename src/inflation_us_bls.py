@@ -15,7 +15,10 @@ import pandas as pd
 
 
 async def generate_telegram_message(tg_api_token):
-    pass
+    # Initialize the bot with your API token
+    bot = telegram.Bot(token=tg_api_token)
+
+    await bot.send_photo(chat_id='@MacroPulse', message="Test", parse_mode='html')
 
 
 if __name__ == '__main__':
