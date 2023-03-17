@@ -1,0 +1,43 @@
+name: Collect inflation data for US from Bureau of Labor Statistics
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 10 28 4 *'
+    - cron: '30 10 9 6 *'
+    - cron: '30 10 21 7 *'
+    - cron: '30 10 15 8 *'
+    - cron: '30 10 27 10 *'
+    - cron: '30 10 15 12 *'
+
+
+jobs:
+  run_script:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Test chrome
+        run: chrome --version
+
+      - name: Install chromedriver
+        uses: nanasess/setup-chromedriver@v1
+
+      - name: Test chromedriver
+        run: timeout 5 chromedriver --url-base=/wd/hub || ( [[ $? -eq 124 ]] && echo "Chromedriver launched successfully" )
+
+      - name: Set up Python environment
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run parser script
+        run: python src/key_interest_rate_ru_cbrf.py ${{ secrets.TG_API_TOKEN }}
