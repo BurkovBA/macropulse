@@ -18,7 +18,7 @@ async def generate_telegram_message(tg_api_token):
     # Initialize the bot with your API token
     bot = telegram.Bot(token=tg_api_token)
 
-    await bot.send_message(chat_id='@MacroPulse', message="Test", parse_mode='html')
+    await bot.send_message(chat_id='@MacroPulse', text="Test", parse_mode='html')
 
 
 if __name__ == '__main__':
