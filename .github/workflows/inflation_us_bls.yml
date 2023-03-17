@@ -3,14 +3,14 @@ name: Collect inflation data for US from Bureau of Labor Statistics
 on:
   workflow_dispatch:
   schedule:
-    - cron: '30 8 4 12 *'
-    - cron: '30 8 5 10 *'
-    - cron: '30 8 6 13 *'
-    - cron: '30 8 7 12 *'
-    - cron: '30 8 8 10 *'
-    - cron: '30 8 9 13 *'
-    - cron: '30 8 10 12 *'
-    - cron: '30 8 11 14 *'
+    - cron: '30 8 12 4 *'
+    - cron: '30 8 10 5 *'
+    - cron: '30 8 13 6 *'
+    - cron: '30 8 12 7 *'
+    - cron: '30 8 10 8 *'
+    - cron: '30 8 13 9 *'
+    - cron: '30 8 12 10 *'
+    - cron: '30 8 14 11 *'
     - cron: '30 8 12 12 *'
 
 jobs:
