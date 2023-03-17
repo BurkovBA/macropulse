@@ -123,7 +123,7 @@ def get_plot(df):
     x = np.arange(len(df.columns) - 1)
 
     for index, row in df.iterrows():
-        plt.plot(x, row.to_numpy()[1:], label=row['Country'])
+        plt.plot(x, row.to_numpy()[1:], label=row['Country'], linewidth=3)
 
     plt.legend(fontsize=14, loc='right')
 
