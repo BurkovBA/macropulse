@@ -3,7 +3,7 @@ name: Collect inflation data for US from Bureau of Labor Statistics
 on:
   workflow_dispatch:
   schedule:
-    - cron: '30 8 04 12 * 2023'  # Schedule is here: https://www.bls.gov/schedule/news_release/cpi.htm
+    - cron: '30 8 04 12 * 2023'
     - cron: '30 8 05 10 * 2023'
     - cron: '30 8 06 13 * 2023'
     - cron: '30 8 07 12 * 2023'
