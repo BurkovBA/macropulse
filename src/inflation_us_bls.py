@@ -13,7 +13,7 @@ from bs4 import BeautifulSoup
 
 
 # Events schedule is here: https://www.bls.gov/schedule/news_release/cpi.htm
-url = "https://www.bls.gov/cpi/#"
+url = "https://www.bls.gov/cpi/#:~:text=Next%20Release,Eastern%20Time."
 
 
 def get_highcharts_plot():
