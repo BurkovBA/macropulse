@@ -168,7 +168,7 @@ async def generate_telegram_message(tg_api_token):
     caption = f'''
 <u>Вышла <a href="{url}">статистика</a> по изменению позиций иностранных держателей в US Treasuries.</u>
     
-    Общий госдолг, выкупленный иностранцами, {verb} на {sorted_df.loc[sorted_df['Country'] == 'Grand Total']['abs diff'].iloc[0]:.2f} миллиардов долларов.
+Общий госдолг, выкупленный иностранцами, {verb} на {sorted_df.loc[sorted_df['Country'] == 'Grand Total']['abs diff'].iloc[0]:.2f} миллиардов долларов.
     '''
 
     # Upload the image to Telegram and get its file ID

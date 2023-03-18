@@ -72,11 +72,11 @@ async def generate_telegram_message(tg_api_token):
 
     # Create the caption for the post
     caption = f'''
-    <u>Вышли <a href="{url}">данные</a> по инфляции в США.</u>
+<u>Вышли <a href="{url}">данные</a> по инфляции в США.</u>
 
-    {header}
+{header}
 
-    {message}
+{message}
     '''
 
     # Upload the image to Telegram and get its file ID
