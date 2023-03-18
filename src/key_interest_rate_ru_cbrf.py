@@ -83,7 +83,7 @@ async def generate_telegram_message(tg_api_token):
     caption = f'''
     <u>Состоялось заседание по <a href="{url}">ключевой ставке Центрального банка РФ</a></u>
 
-    Новое значение ключевой ставки: <b>{key_interest_rate}</b>.
+    Новое значение ключевой ставки: <b>{key_interest_rate}%</b>.
     '''
 
     # Upload the image to Telegram and get its file ID
