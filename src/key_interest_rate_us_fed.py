@@ -48,7 +48,7 @@ async def generate_telegram_message(tg_api_token):
     # Initialize the bot with your API token
     bot = telegram.Bot(token=tg_api_token)
 
-    url = "https://www.federalreserve.gov/newsevents/pressreleases/monetary20230201a.htm"
+    url = get_url()  # "https://www.federalreserve.gov/newsevents/pressreleases/monetary20230201a.htm"
     text = get_release_text(url)
 
     # Create the caption for the post
@@ -60,7 +60,7 @@ async def generate_telegram_message(tg_api_token):
     '''
 
     # Upload the image to Telegram and get its file ID
-    await bot.send_message(chat_id='@MacroPulse', text=text, parse_mode='html')
+    await bot.send_message(chat_id='@MacroPulse', text=caption, parse_mode='html')
 
 
 if __name__ == '__main__':
