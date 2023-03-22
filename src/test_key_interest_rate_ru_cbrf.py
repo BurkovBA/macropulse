@@ -3,7 +3,7 @@ import unittest
 import key_interest_rate_ru_cbrf
 
 
-class InlationRuRosstatUnitTest(unittest.TestCase):
+class InlationKeyInterestRateUnitTest(unittest.TestCase):
     """python -m unittest test_module.TestClass.test_method"""
     def test_get_highcharts_plot(self):
         image = key_interest_rate_ru_cbrf.get_plot()

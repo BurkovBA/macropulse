@@ -3,7 +3,7 @@ import unittest
 import inflation_us_bls
 
 
-class InlationRuRosstatUnitTest(unittest.TestCase):
+class InlationUsBlsUnitTest(unittest.TestCase):
     """python -m unittest test_module.TestClass.test_method"""
     def test_get_highcharts_plot(self):
         image = inflation_us_bls.get_highcharts_plot()

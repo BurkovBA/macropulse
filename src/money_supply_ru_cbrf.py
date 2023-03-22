@@ -18,11 +18,35 @@ url = "https://www.cbr.ru/statistics/ms/"
 
 
 def get_image():
-    return
+    options = webdriver.ChromeOptions()
+
+    options.headless = True
+
+    driver = webdriver.Chrome(options=options)
+    driver.get(url)
+
+    # Wait for the element to appear on the page
+    wait = WebDriverWait(driver, 5)
+    element = wait.until(EC.presence_of_element_located((By.CLASS_NAME, "xc-uicomponent")))
+
+    # Take a screenshot of element and convert it into a PIL Image object
+    pil_image = Image.open(BytesIO(element.screenshot_as_png))
+
+    return pil_image
 
 
 def get_money_supply():
-    return
+    response = requests.get(url)
+    html_content = response.text
+
+    # Parse the HTML content with Beautiful Soup
+    soup = BeautifulSoup(html_content, "html.parser")
+
+    # Find the div element with class "nr-entry"
+    div_element = soup.find("div", {"id": "xc-label-div-xgen_2926"})
+    div_content = div_element.text.strip()
+
+    return div_content
 
 
 async def generate_telegram_message(tg_api_token):
