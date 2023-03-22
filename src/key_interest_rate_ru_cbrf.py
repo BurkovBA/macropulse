@@ -54,7 +54,7 @@ def get_key_interest_rate():
     # Parse the HTML content with Beautiful Soup
     soup = BeautifulSoup(html_content, "html.parser")
 
-    # Find the div element with class "nr-entry"
+    # Find the table element with class "data"
     data_table_element = soup.find("table", {"class": "data"})
 
     # Find the second tr element within the div element and get its text content

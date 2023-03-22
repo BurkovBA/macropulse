@@ -5,7 +5,7 @@ import key_interest_rate_ru_cbrf
 
 class InlationKeyInterestRateUnitTest(unittest.TestCase):
     """python -m unittest test_module.TestClass.test_method"""
-    def test_get_highcharts_plot(self):
+    def test_get_plot(self):
         image = key_interest_rate_ru_cbrf.get_plot()
         image.save('tmp_image.png')
 

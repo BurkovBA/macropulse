@@ -1,0 +1,43 @@
+name: Collect interest rate in US from investing.com
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 9 22 3 *'
+    - cron: '0 9 3 5 *'
+    - cron: '0 9 14 6 *'
+    - cron: '0 9 26 7 *'
+    - cron: '0 9 20 9 *'
+    - cron: '0 9 1 11 *'
+    - cron: '0 9 13 12 *'
+
+jobs:
+  run_script:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Test chrome
+        run: chrome --version
+
+      - name: Install chromedriver
+        uses: nanasess/setup-chromedriver@v1
+
+      - name: Test chromedriver
+        run: timeout 5 chromedriver --url-base=/wd/hub || ( [[ $? -eq 124 ]] && echo "Chromedriver launched successfully" )
+
+      - name: Set up Python environment
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run parser script
+        run: python src/key_interest_rate_us_fed.py ${{ secrets.TG_API_TOKEN }}
