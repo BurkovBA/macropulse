@@ -60,7 +60,7 @@ async def generate_telegram_message(tg_api_token):
     '''
 
     # Upload the image to Telegram and get its file ID
-    await bot.send_message(chat_id='@MacroPulse', message=text, parse_mode='html')
+    await bot.send_message(chat_id='@MacroPulse', text=text, parse_mode='html')
 
 
 if __name__ == '__main__':
