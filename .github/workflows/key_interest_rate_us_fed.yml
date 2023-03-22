@@ -1,4 +1,4 @@
-name: Collect interest rate in US from investing.com
+name: Collect interest rate in US from FED release
 
 on:
   workflow_dispatch:
