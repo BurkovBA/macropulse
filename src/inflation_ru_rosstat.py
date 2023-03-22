@@ -36,10 +36,10 @@ def get_main_text(url):
     # Parse the HTML content using BeautifulSoup
     soup = BeautifulSoup(html_content, 'html.parser')
 
-    p_P7 = soup.find('p', {'class': 'P2'})
-    span_T11 = p_P7.find_all('span', {'class': 'T10'})
+    p = soup.find_all('p')[3]
+    spans = p.find_all('span')
 
-    return "".join([span.text for span in span_T11])
+    return "".join([spans[0].text, spans[2].text])
 
 
 def get_image(url):
