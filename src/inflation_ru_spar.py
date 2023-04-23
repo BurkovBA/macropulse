@@ -47,7 +47,7 @@ def get_current_prices():
     for product_name in basket:
         options = webdriver.ChromeOptions()
 
-        # options.headless = True
+        options.headless = True
 
         # Set up the Chrome driver
         driver = webdriver.Chrome(options=options)
