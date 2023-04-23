@@ -5,3 +5,5 @@ beautifulsoup4
 pandas
 numpy
 matplotlib
+seaborn
+dataframe_image
